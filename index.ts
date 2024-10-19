@@ -28,7 +28,7 @@ for (const [feature, handler] of Object.entries(features)) {
 }
 
 export default {
-    port: 3000,
+    port: 5001,
     async fetch(request: Request) {
         return await app.run(request)
     },

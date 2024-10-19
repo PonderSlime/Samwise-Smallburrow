@@ -5,8 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "bun run --watch index.ts",
-        "build": "bun build --compile --minify --sourcemap ./index.ts --outfile dist/welcomeBot",
-        "ngrok": "ngrok http 3000 --domain=casual-renewing-reptile.ngrok-free.app"
+        "build": "bun build --compile --minify --sourcemap ./index.ts --outfile dist/welcomeBot"
     },
     "devDependencies": {
         "@types/bun": "latest"
