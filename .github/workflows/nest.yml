@@ -17,4 +17,4 @@ jobs:
           script: |
             cd /home/ponderslime/pub/samwise-smallburrow
             git pull
-            systemctl --user restart SamwiseSmallburrow.service
+            systemctl --user restart SamwiseSmallburrow.service 
