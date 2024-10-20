@@ -2,11 +2,6 @@ require('dotenv').config();
 
 const { App, contextBuiltinKeys } = require('@slack/bolt');
 
-var threadTs;
-    if(message.thread_ts){threadTs = message.thread_ts; }else{threadTs=message.ts;}
-/* const { features } = require('./features/index.js');
-/* const { features } = require('./features/index.js') */
-
 console.log(
     '----------------------------------\nSamwise Smallburrow Server\n----------------------------------\n'
 )
@@ -107,7 +102,7 @@ const hello = async () => {
     app.message('hello', async ({ message, say }) => {
     // say() sends a message to the channel where the event was triggered
         console.log(`👏 ${message.user} said hi`)
-        await say({text:`Hey there <@${message.user}>!`, thread_ts:threadTs});
+        await say({text:`Hey there <@${message.user}>! Thanks for saying hi!`,thread_ts: message.thread_ts || message.ts});
     });
 }
 hello()
