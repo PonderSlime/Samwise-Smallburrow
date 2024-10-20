@@ -1,6 +1,9 @@
 require('dotenv').config();
 
 const { App, contextBuiltinKeys } = require('@slack/bolt');
+
+var threadTs;
+    if(message.thread_ts){threadTs = message.thread_ts; }else{threadTs=message.ts;}
 /* const { features } = require('./features/index.js');
 /* const { features } = require('./features/index.js') */
 
@@ -59,7 +62,7 @@ const newMemberJoin = async () => {
         console.log(
             `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
         )
-        await say(`Greetings <@${payload.user}>`)
+        await app.client.conversations.create(`Greetings <@${payload.user}>`)
         // Send subsequent messages as thread replies
         /* const thread_ts = await app.client.conversations
             .history({
@@ -104,7 +107,7 @@ const hello = async () => {
     app.message('hello', async ({ message, say }) => {
     // say() sends a message to the channel where the event was triggered
         console.log(`👏 ${message.user} said hi`)
-        await say(`Hey there <@${message.user}>!`);
+        await say({text:`Hey there <@${message.user}>!`, thread_ts:threadTs});
     });
 }
 hello()
