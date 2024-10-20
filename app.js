@@ -51,14 +51,14 @@ function sleep(ms) {
 }
 const newMemberJoin = async () => {
     // listen for new members joining the channel
-    app.event('member_joined_channel', async ({ payload, context, message, say }) => {
+    app.event('member_joined_channel', async ({ payload, message, say }) => {
         /* if (message.channel === process.env.CHANNEL) { */
         console.log(`🎩 Ushering ${payload.user} into the channel.`)
         
         console.log(
             `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
         )
-        const response = await context.response({
+        const response = async ({
             text: `Greetings ${payload.user}!`,
             response: 'in_channel',
             delete_original: true,
