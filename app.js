@@ -51,8 +51,8 @@ function sleep(ms) {
 }
 const newMemberJoin = async () => {
     // listen for new members joining the channel
-    app.message('welcome', async ({ message, say }) => {
-        /* if (message.channel === process.env.CHANNEL) { */
+    app.event('member_joined_channel', async ({ payload }) => {
+        if (message.channel === process.env.CHANNEL) {
             console.log(`🎩 Ushering ${message.user} into the channel.`)
             
             console.log(
@@ -71,7 +71,7 @@ const newMemberJoin = async () => {
             await sleep(Math.random() * 5000)
         
             await say(`\n\n_Now, rest yourself by the fire. There’ll be plenty of time to talk about your travels, and if you’ve got any stories to share, we’ll be more than eager to hear 'em. "A tale is a gift from one heart to another," my old Gaffer used to say. And I reckon, in these parts, we’ve got no shortage of open ears and warm hearths. So, welcome, friend! Stay as long as you like, because there’s no place for weariness when you’re among hobbits!`)
-        /* } */
+        }
     })
    /*  app.event('member_joined_channel', async ({ payload }) => {
         if (message.channel === process.env.CHANNEL) {
@@ -82,9 +82,8 @@ const newMemberJoin = async () => {
 
     app.command('/samwise-smallburrow-trigger', async ({ message }) => {
         console.log(
-            `🎩 Ushering ${message.user_id} into the channel via command.`
+            `🎩 Ushering ${message.user_id} into the channel via command. (test)`
         )
-        await welcomeNewMember(app, message.user_id)
     })
 }
 const appMention = async () => {
