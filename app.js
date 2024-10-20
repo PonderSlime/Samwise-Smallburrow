@@ -53,8 +53,6 @@ const newMemberJoin = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload, message, say }) => {
     /* app.message('channel', async ({ payload, message, say }) => { */
-        console.log(`👏 ${message.user} said channel`)
-        await say(`Hey there <@${message.user}>!`);
         /* if (message.channel === process.env.CHANNEL) { */
         console.log(`🎩 Ushering ${payload.user} into the channel.`)
         
@@ -92,15 +90,6 @@ const newMemberJoin = async () => {
             await welcomeNewMember(app, message.user)
         }
     }) */
-
-    app.command('/samwise-smallburrow-trigger', async ({ command, ack, respond }) => {
-        // Acknowledge the command request
-        await ack();
-        await respond('Command received!');
-        console.log(
-            `🎩 Ushering ${message.user_id} into the channel via command. (test)`
-        )
-    })
 }
 const appMention = async () => {
     // listen for new members joining the channel
