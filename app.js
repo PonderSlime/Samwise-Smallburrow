@@ -59,7 +59,6 @@ const newMemberJoin = async () => {
         )
         await app.client.chat.postMessage({
             text: `Greetings <@${payload.user}>`,
-            token: process.env.SLACK_BOT_TOKEN,
         })
         // Send subsequent messages as thread replies
         /* const thread_ts = await app.client.conversations
