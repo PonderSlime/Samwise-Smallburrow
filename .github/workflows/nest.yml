@@ -3,10 +3,12 @@ name: Automatically deploy to nest
 on: [push]
 
 jobs:
-  
-  deploy-to-nest:
-      runs-on: ubuntu-latest
-      steps:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+    steps:
       - name: Connect to ssh, pull and systemctl restart
         uses: appleboy/ssh-action@v1.0.3
         with:
