@@ -102,7 +102,11 @@ const hello = async () => {
     app.message('hello', async ({ message, say }) => {
     // say() sends a message to the channel where the event was triggered
         console.log(`👏 ${message.user} said hi`)
+<<<<<<< HEAD
         await say({text:`Hey there <@${message.user}>! Thanks for saying hi!`,thread_ts: message.thread_ts || message.ts});
+=======
+        await say({text:`Hey there <@${message.user}>! Thanks for saying hi!`, thread_ts:threadTs});
+>>>>>>> origin/main
     });
 }
 hello()
