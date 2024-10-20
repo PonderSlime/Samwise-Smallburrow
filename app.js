@@ -35,6 +35,25 @@ function sleep(ms) {
         setTimeout(resolve, ms);
     });
 }
+const commands = async () => {
+    app.command("/wl", async ({
+        command,
+        ack
+    }) => {
+        console.log(command)
+        await ack()
+    
+        channel_id = command.channel_id
+        user_id = command.user_id
+    
+        await app.client.chat.postEphemeral({
+            token: BOT_TOKEN,
+            channel: channel_id,
+            user: user_id,
+            text: "hi"
+        });
+    });
+}
 const newMemberJoin = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload, message, say, channel }) => {
@@ -109,3 +128,4 @@ const hello = async () => {
 hello()
 newMemberJoin()
 appMention()
+commands()
