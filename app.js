@@ -59,7 +59,6 @@ const newMemberJoin = async () => {
         )
         await app.client.chat.postMessage({
             text: `Greetings <@${payload.user}>`,
-            thread_ts: message.ts,
             channel: C07SLT702UA,
         })
         // Send subsequent messages as thread replies
