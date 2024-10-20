@@ -15,9 +15,6 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            : # Load nix binaries
-            export PATH=/home/ponderslime/.nix-profile/bin:$PATH
-            export PATH=/nix/var/nix/profiles/default/bin:$PATH
-            cd /home/ponderslime/samwise-smallburrow
+            cd /home/ponderslime/pub/samwise-smallburrow
             git pull
             systemctl --user restart SamwiseSmallburrow.service
