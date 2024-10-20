@@ -110,7 +110,7 @@ const appMention = async () => {
     // listen for new members joining the channel
     app.event('app_mention', async ({ message, say }) => {
         console.log(`${message.user} mentioned Samwise Smallburrow`)
-        await say(`<@${message.user}> if you want some help try asking my creator <@${process.env.CREATOR}>`)
+        await say({ text:`<@${message.user}> if you want some help try asking my creator <@${process.env.CREATOR}>`, thread_ts: message.thread_ts || message.ts })
     })
 }
 
