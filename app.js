@@ -58,7 +58,7 @@ const newMemberJoin = async () => {
             `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
         )
         await app.client.chat.postMessage({
-            text: `Greetings <@${payload.user}>`
+            text: `Greetings <@${payload.user}>`,
             thread_ts: message.ts,
             channel: C07SLT702UA,
         })
