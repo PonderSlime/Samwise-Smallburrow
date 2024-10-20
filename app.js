@@ -51,8 +51,9 @@ function sleep(ms) {
 }
 const newMemberJoin = async () => {
     // listen for new members joining the channel
-    app.event('member_joined_channel', async ({ payload, say }) => {
-        app.message("wake up", async ({ message, say }) => {
+    app.event('member_joined_channel', async ({ payload }) => {
+        console.log(`${payload.user} joined the channel`)
+        app.message("wake up", async ({ message, say, payload }) => {
             try {
                 /* if (message.channel === process.env.CHANNEL) { */
                 console.log(`🎩 Ushering ${payload.user} into the channel.`)
