@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { App } = require('@slack/bolt');
+const { App, contextBuiltinKeys } = require('@slack/bolt');
 /* const { features } = require('./features/index.js');
 /* const { features } = require('./features/index.js') */
 
@@ -53,13 +53,15 @@ const newMemberJoin = async () => {
     // listen for new members joining the channel
     /* app.event('member_joined_channel', async ({ payload, message, say }) => { */
     app.message('channel', async ({ payload, message, say }) => {
+        console.log(`👏 ${message.user} said channel`)
+        await say(`Hey there <@${message.user}>!`);
         /* if (message.channel === process.env.CHANNEL) { */
         console.log(`🎩 Ushering ${payload.user} into the channel.`)
         
         console.log(
             `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
         )
-        const response = async ({
+        const response = ({
             text: `Greetings ${payload.user}!`,
             response: 'in_channel',
             delete_original: true,
@@ -73,7 +75,7 @@ const newMemberJoin = async () => {
                 },
             ],
         })
-        
+        response()
         // Send subsequent messages as thread replies
         const thread_ts = await app.client.conversations
             .history({
