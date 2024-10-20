@@ -57,7 +57,11 @@ const newMemberJoin = async () => {
         console.log(
             `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
         )
-        await app.client.chat.postMessage(`Greetings <@${payload.user}>`)
+        await app.client.chat.postMessage({
+            text: `Greetings <@${payload.user}>`
+            thread_ts: message.ts,
+            channel: C07SLT702UA,
+        })
         // Send subsequent messages as thread replies
         /* const thread_ts = await app.client.conversations
             .history({
