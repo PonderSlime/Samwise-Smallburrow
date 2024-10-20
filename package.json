@@ -1,25 +1,23 @@
 {
-    "name": "abot",
-    "version": "0.2.3",
-    "module": "index.ts",
-    "type": "module",
-    "scripts": {
-        "dev": "bun run --watch index.ts",
-        "build": "bun build --compile --minify --sourcemap ./index.ts --outfile dist/welcomeBot"
-    },
-    "devDependencies": {
-        "@types/bun": "latest"
-    },
-    "peerDependencies": {
-        "typescript": "^5.0.0"
-    },
-    "dependencies": {
-        "slack-edge": "^0.13.2"
-    },
-    "prettier": {
-        "trailingComma": "es5",
-        "tabWidth": 4,
-        "semi": false,
-        "singleQuote": true
-    }
+  "name": "samwise-smallburrow",
+  "version": "1.0.0",
+  "description": "My Slack greeting bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PonderSlime/Samwise-Smallburrow.git"
+  },
+  "author": "Micah Edwards",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PonderSlime/Samwise-Smallburrow/issues"
+  },
+  "homepage": "https://github.com/PonderSlime/Samwise-Smallburrow#readme",
+  "dependencies": {
+    "@slack/bolt": "^4.0.0",
+    "dotenv": "^16.4.5"
+  }
 }
