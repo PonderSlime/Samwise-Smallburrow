@@ -58,18 +58,8 @@ const newMemberJoin = async () => {
                 `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
             )
             await app.client.chat.postMessage({
-                text: `Greetings <@${payload.user.id}!>`,
-                response_type: 'in_channel',
-                delete_original: true,
-                blocks: [
-                    {
-                        type: 'section',
-                        text: {
-                            type: 'mrkdwn',
-                            text: `Greetings traveler! You must be <@${payload.user.id}>!`,
-                        },
-                    },
-                ],
+                text: `Greetings traveler! You must be <@${payload.user.id}>!`,
+                channel: process.env.CHANNEL
             })
             // Send subsequent messages as thread replies
             const thread_ts = await app.client.conversations
