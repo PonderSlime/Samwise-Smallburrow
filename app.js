@@ -52,11 +52,11 @@ function sleep(ms) {
 const newMemberJoin = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload }) => {
-        if (message.channel === process.env.CHANNEL) {
-            console.log(`🎩 Ushering ${message.user} into the channel.`)
+        /* if (message.channel === process.env.CHANNEL) { */
+            console.log(`🎩 Ushering ${payload.user} into the channel.`)
             
             console.log(
-                `📣 Samwise Smallburrow is announcing the presence of ${message.user}.`/* ${payload.user.name}. */
+                `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
             )
             await say(`Well now! Look at you, wanderin' in from the road, all covered in dust and weary like you’ve been through half of the Shire and back! You must be in need of a sit down, and a bit of refreshment, I reckon. Let me take your pack—aye, it looks heavy enough to pull a troll off balance! Name’s Samwise Smallburrow, at your service. Us hobbits don't stand on ceremony too much, but we do know how to make a guest feel right at home. You've found the right spot, friend!`),
         
@@ -71,7 +71,7 @@ const newMemberJoin = async () => {
             await sleep(Math.random() * 5000)
         
             await say(`\n\n_Now, rest yourself by the fire. There’ll be plenty of time to talk about your travels, and if you’ve got any stories to share, we’ll be more than eager to hear 'em. "A tale is a gift from one heart to another," my old Gaffer used to say. And I reckon, in these parts, we’ve got no shortage of open ears and warm hearths. So, welcome, friend! Stay as long as you like, because there’s no place for weariness when you’re among hobbits!`)
-        }
+        /* } */
     })
    /*  app.event('member_joined_channel', async ({ payload }) => {
         if (message.channel === process.env.CHANNEL) {
