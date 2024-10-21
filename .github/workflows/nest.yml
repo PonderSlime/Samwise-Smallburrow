@@ -12,9 +12,9 @@ jobs:
       - name: Connect to ssh, pull and systemctl restart
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: hackclub.app
+          host: ${{ secrets.HOST }}
           username: ponderslime
-          key: ${{ secrets }}
+          key: ${{ secrets.KEY }}
           port: 22
           script: |
             cd /home/ponderslime/pub/samwise-smallburrow
