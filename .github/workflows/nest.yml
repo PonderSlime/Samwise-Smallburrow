@@ -21,3 +21,5 @@ jobs:
             git pull
             systemctl --user restart SamwiseSmallburrow.service
             ssh -O exit ponderslime@hackclub.app
+            gh run cancel ${{ github.run_id }}
+            gh run watch ${{ github.run_id }}
