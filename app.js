@@ -65,12 +65,12 @@ const newMemberJoin = async () => {
         // Send initial messages
         await app.client.chat.postMessage({
             text: `Greetings traveler! You must be <@${payload.user}>!`,
-            channel: process.env.CHANNEL,
+            channel: payload.channel_id,
         })
         // Send subsequent messages as thread replies
         const thread_ts = await app.client.conversations
             .history({
-                channel: process.env.CHANNEL,
+                channel: payload.channel_id,
                 limit: 1,
             })
             .then((res) => res.messages?.[0].ts)
