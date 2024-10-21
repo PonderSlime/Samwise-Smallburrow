@@ -50,7 +50,7 @@ const commands = async () => {
             token: BOT_TOKEN,
             channel: channel_id,
             user: user_id,
-            text: "hi"
+            text: "hi! why did you run a command?"
         });
     });
 }
