@@ -14,7 +14,7 @@ jobs:
         with:
           host: hackclub.app
           username: ponderslime
-          key: ${{ secrets.KEY }}
+          key: ${{ secrets.SAMWISEKEY }}
           port: 22
           script: |
             cd /home/ponderslime/pub/samwise-smallburrow
