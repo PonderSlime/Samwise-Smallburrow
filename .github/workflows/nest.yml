@@ -7,11 +7,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     environment:
-<<<<<<< HEAD
-      name: production
-=======
       name: SamwiseSmallburrow
->>>>>>> origin/main
     steps:
       - name: Connect to ssh, pull and systemctl restart
         uses: appleboy/ssh-action@v1.0.3
