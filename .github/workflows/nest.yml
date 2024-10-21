@@ -20,4 +20,4 @@ jobs:
             cd /home/ponderslime/pub/samwise-smallburrow
             git pull
             systemctl --user restart SamwiseSmallburrow.service
-            exit
+            ssh -O exit ponderslime@hackclub.app
