@@ -47,7 +47,7 @@ const commands = async () => {
         user_id = command.user_id
     
         await app.client.chat.postEphemeral({
-            token: BOT_TOKEN,
+            token: process.env.SLACK_BOT_TOKEN,
             channel: channel_id,
             user: user_id,
             text: "hi! why did you run a command?"
