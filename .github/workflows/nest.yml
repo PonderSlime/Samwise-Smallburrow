@@ -7,16 +7,23 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     environment:
+<<<<<<< HEAD
       name: production
+=======
+      name: SamwiseSmallburrow
+>>>>>>> origin/main
     steps:
       - name: Connect to ssh, pull and systemctl restart
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: hackclub.app
+          host: ${{ secrets.HOST }}
           username: ponderslime
           key: ${{ secrets.KEY }}
           port: 22
           script: |
             cd /home/ponderslime/pub/samwise-smallburrow
             git pull
-            systemctl --user restart SamwiseSmallburrow.service 
+            systemctl --user restart SamwiseSmallburrow.service
+            ssh -O exit ponderslime@hackclub.app
+            gh run cancel ${{ github.run_id }}
+            gh run watch ${{ github.run_id }}
