@@ -52,15 +52,81 @@ const commands = async () => {
             user: user_id,
             text: "hi! why did you run a command?"
         });
+    
+        const sendMessageMessage = {
+            "text": "Hi!",
+            "blocks": [
+                {
+                    "type": "modal",
+                    "submit": {
+                        "type": "plain_text",
+                        "text": "Submit",
+                        "emoji": true
+                    },
+                    "close": {
+                        "type": "plain_text",
+                        "text": "Cancel",
+                        "emoji": true
+                    },
+                    "title": {
+                        "type": "plain_text",
+                        "text": "Samwise Message Service",
+                        "emoji": true
+                    },
+                    "blocks": [
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "plain_text",
+                                "text": `:wave: Greetings <@${user_id}>!\nI hear that you want me to deliver a message for you!`,
+                                "emoji": true
+                            }
+                        },
+                        {
+                            "type": "divider"
+                        },
+                        {
+                            "type": "input",
+                            "label": {
+                                "type": "plain_text",
+                                "text": "Whom would you like to send it to?",
+                                "emoji": true
+                            },
+                            "element": {
+                                "type": "plain_text_input",
+                                "multiline": false
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "label": {
+                                "type": "plain_text",
+                                "text": "What is your message?",
+                                "emoji": true
+                            },
+                            "element": {
+                                "type": "plain_text_input",
+                                "multiline": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
     });
+    await client.chat.postMessage({
+        channel: command.channel,
+        blocks: sendMessageMessage.blocks,
+        text: sendMessageMessage.text
+    })
 }
 const newMemberJoin = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload, message, say, channel, event }) => {
-        console.log(`🎩 Ushering ${payload.user} into the channel.`)
+        console.log(`🎩 Ushering ${payload.user} into ${event.channel}.`)
         
         console.log(
-            `📣 Samwise Smallburrow is announcing the presence of ${payload.user}.`/* ${payload.user.name}. */
+            `📣 Samwise Smallburrow is announcing the presence of ${payload.user} into ${event.channel}.`
         )
         // Send initial messages
         await app.client.chat.postMessage({
