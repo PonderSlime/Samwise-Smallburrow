@@ -91,7 +91,74 @@ app.command("/wl", async ({ ack, body, client, command }) => {
 				]
 			}
 		] */
-        "text": "You wish to send a message, eh?",
+        /* "text": "You wish to send a message, eh?",
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "plain_text",
+                    "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
+                    "emoji": true
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "input",
+                "label": {
+                    "type": "plain_text",
+                    "text": "Whom would you like to send it to?",
+                    "emoji": true
+                },
+                "element": {
+                    "type": "plain_text_input",
+                    "multiline": false
+                }
+            },
+            {
+                "type": "input",
+                "label": {
+                    "type": "plain_text",
+                    "text": "What is your message?",
+                    "emoji": true
+                },
+                "element": {
+                    "type": "plain_text_input",
+                    "multiline": true
+                }
+            },
+            {
+				"type": "actions",
+				"elements": [
+					{
+						"type": "button",
+						"text": {
+							"type": "plain_text",
+							"text": "Send your message!",
+							"emoji": true
+						},
+						"action_id": "sendMessage"
+					}
+				]
+			},
+        ] */
+        "type": "modal",
+        "title": {
+            "type": "plain_text",
+            "text": "My App",
+            "emoji": true
+        },
+        "submit": {
+            "type": "plain_text",
+            "text": "Submit",
+            "emoji": true
+        },
+        "close": {
+            "type": "plain_text",
+            "text": "Cancel",
+            "emoji": true
+        },
         "blocks": [
             {
                 "type": "section",
