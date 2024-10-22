@@ -17,7 +17,7 @@ const app = new App({
     appToken: process.env.SLACK_APP_TOKEN,
   // Socket Mode doesn't listen on a port, but in case you want your app to respond to OAuth,
   // you still need to listen on some port!
-    port: process.env.PORT || 3000
+    //port: process.env.PORT || 3000
 });
 const webClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 
@@ -104,7 +104,7 @@ app.command("/wl", async ({ ack, body, client, context, payload }) => {
         console.error(error);
     }
 });
-app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload }) => {
+app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload, ack }) => {
     const submittedValues = payload.view.state.values
     console.log(submittedValues)
     // do stuff with submittedValues
