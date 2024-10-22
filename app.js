@@ -19,14 +19,6 @@ const app = new App({
     port: process.env.PORT || 3000
 });
 
-(async () => {
-    console.log('⚡️ Bolt app is starting up!');
-  // Start your app
-    await app.start();
-
-    console.log('⚡️ Bolt app is running!');
-})();
-
 console.log(
     '\n\n----------------------------------\n'
 )
@@ -55,7 +47,7 @@ const sendMessageMessage = {
                     "type": "section",
                     "text": {
                         "type": "plain_text",
-                        "text": `:wave: Greetings <@${user_id}>!\nI hear that you want me to deliver a message for you!`,
+                        "text": `:wave: Greetings Traveler!\nI hear that you want me to deliver a message for you!`,
                         "emoji": true
                     }
                 },
@@ -90,42 +82,34 @@ const sendMessageMessage = {
         }
     ]
 }
+
+app.command("/wl", async ({ ack, body, client }) => {
+    await ack();
+    await client.views.open({
+        trigger_id: body.trigger_id,
+        view: sendMessageMessage,
+    });
+});
+/* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
+    await ack();
+    const inputValue = view.state.values.input_block.input_action.value;
+    // Do something with the input value
+}); */
+
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
 }
-const commands = async () => {
-    app.command("/wl", async ({
-        command,
-        ack,
-        body,
-        client
-    }) => {
-        console.log(command)
-        await ack()
-    
-        channel_id = command.channel_id
-        user_id = command.user_id
-        
-        await app.client.chat.postEphemeral({
-            token: process.env.SLACK_BOT_TOKEN,
-            channel: channel_id,
-            user: user_id,
-            text: "hi! why did you run a command?"
-        });
-        await ack();
-        await client.views.open({
-            trigger_id: body.trigger_id,
-            view: sendMessageMessage,
-        });
-    });
-    app.view("modal_view_callback_id", async ({ ack, body, view }) => {
-        await ack();
-        const inputValue = view.state.values.input_block.input_action.value;
-        // Do something with the input value
-    });
-}
+
+(async () => {
+    console.log('⚡️ Bolt app is starting up!');
+  // Start your app
+    await app.start();
+
+    console.log('⚡️ Bolt app is running!');
+})();
+
 const newMemberJoin = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload, message, say, channel, event }) => {
