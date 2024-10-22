@@ -105,8 +105,7 @@ const sendMessageMessage = {
         }
     ]
 }
-export default openModal(
-
+const openModal = async () => {
     async ({ inputs, client }) => {
         const response = await client.views.open({
             interactivity_pointer: inputs.interactivity.interactivity_pointer,
@@ -205,11 +204,10 @@ export default openModal(
             completed: false,
             };
         },
-
-)
-app.command("/wl", async ({ ack, body, client, command }) => {
-    openModal()
-});
+    app.command("/wl", async ({ ack, body, client, command }) => {
+        openModal()
+    });
+}
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
     const inputValue = view.state.values.input_block.input_action.value;
