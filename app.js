@@ -25,7 +25,7 @@ console.log(
 
 app.command("/wl", async ({ ack, body, client, command }) => {
     const sendMessageMessage = {
-        "text": "You wish to send a message, eh?",
+        /* "text": "You wish to send a message, eh?",
         "blocks": [
             {
                 "type": "modal",
@@ -82,14 +82,80 @@ app.command("/wl", async ({ ack, body, client, command }) => {
                     }
                 ]
             }
-        ]
+        ] */
+        "text":"Welcome to the Only Once portal. Please read this on the slack client.",
+		"blocks": [
+			{
+				"type": "header",
+				"text": {
+					"type": "plain_text",
+					"text": "Join Only Once!",
+					"emoji": true
+				}
+			},
+			{
+				"type": "section",
+				"text": {
+					"type": "mrkdwn",
+					"text": `Welcome to the Only Once portal, Traveler. From here you can access the Only Once channel.`
+				}
+			},
+			{
+				"type": "divider"
+			},
+			{
+				"type": "section",
+				"text": {
+					"type": "mrkdwn",
+					"text": "In the Ony Once channel you can only send a message once, if you send the same message as anyone before you will get *BANNED*."
+				}
+			},
+			{
+				"type": "section",
+				"text": {
+					"type": "mrkdwn",
+					"text": "*RULES*\n\n- If you send the same message as anyone before you'll get *BANNED*.\n- The max text length is 300characters. If you use more you'll get *BANNED*.\n- All messages get .toLowerCase()ed so different capitalizaction doesnt work! \n- If you spam random characters to abuse the system you'll get *BANNED*.\n- All your messages sent in #only-once will be stored in a database unencrypted and linked with your user id."
+				}
+			},
+			{
+				"type": "divider"
+			},
+			{
+				"type": "actions",
+				"elements": [
+					{
+						"type": "button",
+						"text": {
+							"type": "plain_text",
+							"text": "I want to join!",
+							"emoji": true
+						},
+						"action_id": "joinonlyonce"
+					}
+				]
+			},
+			{
+				"type": "context",
+				"elements": [
+					{
+						"type": "image",
+						"image_url": "https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg",
+						"alt_text": "cute cat"
+					},
+					{
+						"type": "mrkdwn",
+						"text": "This was made by Victorio and is <https://github.com/v1ctorio/slack-only-once|completley open source>."
+					}
+				]
+			}
+		]
     }
     await client.chat.postMessage({
         channel: command.channel_id,
 		blocks: sendMessageMessage.blocks,
 		text: sendMessageMessage.text
     })
-    await slackLog(`New member joined the portal <@${user}>`);
+    await slackLog(`New member joined the portal`);
 });
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
