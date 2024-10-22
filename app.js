@@ -105,6 +105,7 @@ const commands = async () => {
                 }
             ]
         }
+        
     
         await app.client.chat.postEphemeral({
             token: process.env.SLACK_BOT_TOKEN,
@@ -112,14 +113,7 @@ const commands = async () => {
             user: user_id,
             text: "hi! why did you run a command?"
         });
-    
-        await app.client.chat.postMessage({
-            token: process.env.SLACK_BOT_TOKEN,
-            user: user_id,
-            channel: command.channel,
-            blocks: sendMessageMessage.blocks,
-            text: sendMessageMessage.text
-        })
+        return sendMessageMessage;
     });
 }
 const newMemberJoin = async () => {
