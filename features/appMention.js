@@ -12,7 +12,7 @@ const app = new App({
     port: process.env.PORT || 3000
 });
 
-const appMention = async () => {
+const appMentionFn = async () => {
     // listen for new members joining the channel
     app.event('app_mention', async ({ message, say }) => {
         console.log(`${message.user} mentioned Samwise Smallburrow`)
@@ -21,4 +21,4 @@ const appMention = async () => {
 }
 
 /* export default appMention */
-module.exports = { appMention };
+module.exports = { appMentionFn };

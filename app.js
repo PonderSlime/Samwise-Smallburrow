@@ -1,8 +1,13 @@
 require('dotenv').config();
 
 const { App, contextBuiltinKeys } = require('@slack/bolt');
-import * as newMemberJoin from "./features/memberJoin"
-import * as appMention from "./features/appMention"
+const memberJoin = require('./features/memberJoin');
+const appMention = require('./features/appMention');
+const hello = require('./features/hello');
+
+const newMemberJoin = memberJoin.newMemberJoinFn()
+const newAppMention = appMention.appMentionFn()
+const helloCheck = hello.helloFn()
 
 console.log(
     '----------------------------------\nSamwise Smallburrow Server\n----------------------------------\n'
@@ -118,16 +123,7 @@ const commands = async () => {
         return sendMessageMessage;
     });
 }
-
-const hello = async () => {
-    // Listens to incoming messages that contain "hello"
-    app.message('hello', async ({ message, say }) => {
-    // say() sends a message to the channel where the event was triggered
-        console.log(`👏 ${message.user} said hi`)
-        await say({text:`Hey there <@${message.user}>! Thanks for saying hi!`,thread_ts: message.thread_ts || message.ts});
-    });
-}
-hello()
+helloCheck()
 newMemberJoin()
-appMention()
+newAppMention()
 commands()

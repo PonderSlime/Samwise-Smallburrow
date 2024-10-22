@@ -12,7 +12,7 @@ const app = new App({
     port: process.env.PORT || 3000
 });
 
-const newMemberJoin = async () => {
+const newMemberJoinFn = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload, message, say, channel, event }) => {
         console.log(`🎩 Ushering ${payload.user} into ${event.channel}.`)
@@ -69,4 +69,4 @@ const newMemberJoin = async () => {
 }
 
 /* export default newMemberJoin */
-module.exports = { newMemberJoin };
+module.exports = { newMemberJoinFn };
