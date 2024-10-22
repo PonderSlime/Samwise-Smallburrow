@@ -105,66 +105,111 @@ const sendMessageMessage = {
         }
     ]
 }
-function registerModalSubmissionHandler() {
-    this.app.view(
-        sendMessageMessage,
-        /* async ({ ack, body, view, client, respond }) => {
+export default openModal( 
+    def,
 
-            if (
-                view['state']['values'][DATE_PICKER_BLOCK][
-                ACTION_DATE_PICKER_SELECTION
-                ]['selected_date'] != null
-            ) {
-                await ack({
-                    response_action: 'clear',
-                });
-                const value =
-                    view['state']['values'][DATE_PICKER_BLOCK][
-                    ACTION_DATE_PICKER_SELECTION
-                    ]['selected_date'];
-                const metadata = JSON.parse(body.view.private_metadata);
-                client.chat.postMessage({
-                    channel: metadata.channelId,
-                    text: `:date:  <@${body.user.id}> updated the close date to ${value}`,
-                    thread_ts: metadata.message_ts,
-                });
-            }
-            else {
-                let errors = {}
-                errors[DATE_PICKER_BLOCK] = "something wrong!"
-                await ack({
-                    response_action: 'errors',
-                    errors
-                });
-            }
-        }, */
-    );
-}
+    async ({ inputs, client }) => {
+        const response = await client.views.open({
+            interactivity_pointer: inputs.interactivity.interactivity_pointer,
+            view: {
+                "type": "modal",
+                "title": {
+                    "type": "plain_text",
+                    "text": "My App",
+                    "emoji": true
+                },
+                "submit": {
+                    "type": "plain_text",
+                    "text": "Submit",
+                    "emoji": true
+                },
+                "close": {
+                    "type": "plain_text",
+                    "text": "Cancel",
+                    "emoji": true
+                },
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "plain_text",
+                            "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
+                            "emoji": true
+                        }
+                    },
+                    {
+                        "type": "divider"
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "Whom would you like to send it to?"
+                        },
+                        "accessory": {
+                            "type": "users_select",
+                            "placeholder": {
+                                "type": "plain_text",
+                                "text": "Select a user",
+                                "emoji": true
+                            },
+                            "action_id": "users_select-action"
+                        }
+                    },
+                    {
+                        "type": "input",
+                        "label": {
+                            "type": "plain_text",
+                            "text": "What is your message?",
+                            "emoji": true
+                        },
+                        "element": {
+                            "type": "plain_text_input",
+                            "multiline": true
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": " "
+                        }
+                    },
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": " "
+                        },
+                        "accessory": {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Send message",
+                                "emoji": true
+                            },
+                            "value": "submit_message_form",
+                            "action_id": "submit-message-action"
+                        }
+                    }
+                ]
+
+            },
+        });
+        if (response.error) {
+            const error =
+                `Failed to open a modal in the demo workflow. Contact the app maintainers with the following information - (error: ${response.error})`;
+            return { error };
+        }
+            return {
+            // To continue with this interaction, return false for the completion
+            completed: false,
+            };
+        },
+
+)
 app.command("/wl", async ({ ack, body, client, command }) => {
-    
-    /* await client.chat.postMessage({
-        channel: command.channel_id,
-		blocks: sendMessageMessage.blocks,
-		text: sendMessageMessage.text,
-    })
-    console.log(`Command Run`);
-
-    const thread_ts = await app.client.conversations
-            .history({
-                channel: command.channel,
-                limit: 1,
-            })
-            .then((res) => res.messages?.[0].ts)
-    app.action('submit-message-action', async ({ ack, body, client, action }) => {
-
-        await ack()
-        await client.chat.delete({
-            channel: action.channel_id,
-            ts: thread_ts,
-        })
-    
-    }) */
-    registerModalSubmissionHandler
+    openModal()
 });
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
