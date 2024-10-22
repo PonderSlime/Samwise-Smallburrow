@@ -131,6 +131,30 @@ app.command("/wl", async ({ ack, body, client, command }) => {
                     "type": "plain_text_input",
                     "multiline": true
                 }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": " "
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": " "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Send message",
+                        "emoji": true
+                    },
+                    "value": "submit_message_form",
+                    "action_id": "submit-message-action"
+                }
             }
         ]
     }
@@ -140,6 +164,22 @@ app.command("/wl", async ({ ack, body, client, command }) => {
 		text: sendMessageMessage.text,
     })
     console.log(`Command Run`);
+
+    const thread_ts = await app.client.conversations
+            .history({
+                channel: command.channel,
+                limit: 1,
+            })
+            .then((res) => res.messages?.[0].ts)
+    app.action('submit-message-action', async ({ ack, body, client }) => {
+
+        await ack()
+        await client.chat.delete({
+            channel: body.channel_id,
+            message: thread_ts,
+        })
+    
+    })
 });
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
