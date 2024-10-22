@@ -91,7 +91,7 @@ app.command("/wl", async ({ ack, body, client, command }) => {
 				]
 			}
 		] */
-        "text": "You wish to send a message, eh?",
+        "text":"Welcome to the Message portal. Please read this on the slack client.",
         "blocks": [
             {
                 "type": "section",
@@ -105,15 +105,19 @@ app.command("/wl", async ({ ack, body, client, command }) => {
                 "type": "divider"
             },
             {
-                "type": "input",
-                "label": {
-                    "type": "plain_text",
-                    "text": "Whom would you like to send it to?",
-                    "emoji": true
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Whom would you like to send it to?"
                 },
-                "element": {
-                    "type": "plain_text_input",
-                    "multiline": false
+                "accessory": {
+                    "type": "users_select",
+                    "placeholder": {
+                        "type": "plain_text",
+                        "text": "Select a user",
+                        "emoji": true
+                    },
+                    "action_id": "users_select-action"
                 }
             },
             {
@@ -127,29 +131,15 @@ app.command("/wl", async ({ ack, body, client, command }) => {
                     "type": "plain_text_input",
                     "multiline": true
                 }
-            },
-            {
-				"type": "actions",
-				"elements": [
-					{
-						"type": "button",
-						"text": {
-							"type": "plain_text",
-							"text": "Send your message!",
-							"emoji": true
-						},
-						"action_id": "sendMessage"
-					}
-				]
-			},
+            }
         ]
     }
     await client.chat.postMessage({
         channel: command.channel_id,
 		blocks: sendMessageMessage.blocks,
-		text: sendMessageMessage.text
+		text: sendMessageMessage.text,
     })
-    await slackLog(`New member joined the portal`);
+    console.log(`Command Run`);
 });
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
