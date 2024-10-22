@@ -22,143 +22,127 @@ const app = new App({
 console.log(
     '\n\n----------------------------------\n'
 )
-
-app.command("/wl", async ({ ack, body, client, command }) => {
-    const sendMessageMessage = {
-        /* "text":"Welcome to the Only Once portal. Please read this on the slack client.",
-		"blocks": [
-			{
-				"type": "header",
-				"text": {
-					"type": "plain_text",
-					"text": "Join Only Once!",
-					"emoji": true
-				}
-			},
-			{
-				"type": "section",
-				"text": {
-					"type": "mrkdwn",
-					"text": `Welcome to the Only Once portal, <@${user}>. From here you can access the Only Once channel.`
-				}
-			},
-			{
-				"type": "divider"
-			},
-			{
-				"type": "section",
-				"text": {
-					"type": "mrkdwn",
-					"text": "In the Ony Once channel you can only send a message once, if you send the same message as anyone before you will get *BANNED*."
-				}
-			},
-			{
-				"type": "section",
-				"text": {
-					"type": "mrkdwn",
-					"text": "*RULES*\n\n- If you send the same message as anyone before you'll get *BANNED*.\n- The max text length is 300characters. If you use more you'll get *BANNED*.\n- All messages get .toLowerCase()ed so different capitalizaction doesnt work! \n- If you spam random characters to abuse the system you'll get *BANNED*.\n- All your messages sent in #only-once will be stored in a database unencrypted and linked with your user id."
-				}
-			},
-			{
-				"type": "divider"
-			},
-			{
-				"type": "actions",
-				"elements": [
-					{
-						"type": "button",
-						"text": {
-							"type": "plain_text",
-							"text": "I want to join!",
-							"emoji": true
-						},
-						"action_id": "joinonlyonce"
-					}
-				]
-			},
-			{
-				"type": "context",
-				"elements": [
-					{
-						"type": "image",
-						"image_url": "https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg",
-						"alt_text": "cute cat"
-					},
-					{
-						"type": "mrkdwn",
-						"text": "This was made by Victorio and is <https://github.com/v1ctorio/slack-only-once|completley open source>."
-					}
-				]
-			}
-		] */
-        "text":"Welcome to the Message portal. Please read this on the slack client.",
-        "blocks": [
-            {
-                "type": "section",
-                "text": {
-                    "type": "plain_text",
-                    "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
-                    "emoji": true
-                }
-            },
-            {
-                "type": "divider"
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "Whom would you like to send it to?"
-                },
-                "accessory": {
-                    "type": "users_select",
-                    "placeholder": {
-                        "type": "plain_text",
-                        "text": "Select a user",
-                        "emoji": true
-                    },
-                    "action_id": "users_select-action"
-                }
-            },
-            {
-                "type": "input",
-                "label": {
-                    "type": "plain_text",
-                    "text": "What is your message?",
-                    "emoji": true
-                },
-                "element": {
-                    "type": "plain_text_input",
-                    "multiline": true
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": " "
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": " "
-                },
-                "accessory": {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Send message",
-                        "emoji": true
-                    },
-                    "value": "submit_message_form",
-                    "action_id": "submit-message-action"
-                }
+const sendMessageMessage = {
+    "type": "modal",
+    "title": {
+        "type": "plain_text",
+        "text": "My App",
+        "emoji": true
+    },
+    "submit": {
+        "type": "plain_text",
+        "text": "Submit",
+        "emoji": true
+    },
+    "close": {
+        "type": "plain_text",
+        "text": "Cancel",
+        "emoji": true
+    },
+    "blocks": [
+        {
+            "type": "section",
+            "text": {
+                "type": "plain_text",
+                "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
+                "emoji": true
             }
-        ]
-    }
-    await client.chat.postMessage({
+        },
+        {
+            "type": "divider"
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": "Whom would you like to send it to?"
+            },
+            "accessory": {
+                "type": "users_select",
+                "placeholder": {
+                    "type": "plain_text",
+                    "text": "Select a user",
+                    "emoji": true
+                },
+                "action_id": "users_select-action"
+            }
+        },
+        {
+            "type": "input",
+            "label": {
+                "type": "plain_text",
+                "text": "What is your message?",
+                "emoji": true
+            },
+            "element": {
+                "type": "plain_text_input",
+                "multiline": true
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": " "
+            }
+        },
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": " "
+            },
+            "accessory": {
+                "type": "button",
+                "text": {
+                    "type": "plain_text",
+                    "text": "Send message",
+                    "emoji": true
+                },
+                "value": "submit_message_form",
+                "action_id": "submit-message-action"
+            }
+        }
+    ]
+}
+function registerModalSubmissionHandler() {
+    this.slackApp.view(
+        sendMessageMessage,
+        /* async ({ ack, body, view, client, respond }) => {
+
+            if (
+                view['state']['values'][DATE_PICKER_BLOCK][
+                ACTION_DATE_PICKER_SELECTION
+                ]['selected_date'] != null
+            ) {
+                await ack({
+                    response_action: 'clear',
+                });
+                const value =
+                    view['state']['values'][DATE_PICKER_BLOCK][
+                    ACTION_DATE_PICKER_SELECTION
+                    ]['selected_date'];
+                const metadata = JSON.parse(body.view.private_metadata);
+                client.chat.postMessage({
+                    channel: metadata.channelId,
+                    text: `:date:  <@${body.user.id}> updated the close date to ${value}`,
+                    thread_ts: metadata.message_ts,
+                });
+            }
+            else {
+                let errors = {}
+                errors[DATE_PICKER_BLOCK] = "something wrong!"
+                await ack({
+                    response_action: 'errors',
+                    errors
+                });
+            }
+        }, */
+    );
+}
+app.command("/wl", async ({ ack, body, client, command }) => {
+    
+    /* await client.chat.postMessage({
         channel: command.channel_id,
 		blocks: sendMessageMessage.blocks,
 		text: sendMessageMessage.text,
@@ -179,7 +163,8 @@ app.command("/wl", async ({ ack, body, client, command }) => {
             ts: thread_ts,
         })
     
-    })
+    }) */
+    registerModalSubmissionHandler
 });
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
