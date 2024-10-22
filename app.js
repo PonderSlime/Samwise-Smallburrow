@@ -25,104 +25,108 @@ console.log(
 
 app.command("/wl", async ({ ack, body, client, command }) => {
     const sendMessageMessage = {
-        /* "text": "You wish to send a message, eh?",
-        "blocks": [
-            {
-                "type": "modal",
-                "submit": {
-                    "type": "plain_text",
-                    "text": "Submit",
-                    "emoji": true
-                },
-                "close": {
-                    "type": "plain_text",
-                    "text": "Cancel",
-                    "emoji": true
-                },
-                "title": {
-                    "type": "plain_text",
-                    "text": "Samwise Message Service",
-                    "emoji": true
-                },
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "plain_text",
-                            "text": `:wave: Greetings Traveler!\nI hear that you want me to deliver a message for you!`,
-                            "emoji": true
-                        }
-                    },
-                    {
-                        "type": "divider"
-                    },
-                    {
-                        "type": "input",
-                        "label": {
-                            "type": "plain_text",
-                            "text": "Whom would you like to send it to?",
-                            "emoji": true
-                        },
-                        "element": {
-                            "type": "plain_text_input",
-                            "multiline": false
-                        }
-                    },
-                    {
-                        "type": "input",
-                        "label": {
-                            "type": "plain_text",
-                            "text": "What is your message?",
-                            "emoji": true
-                        },
-                        "element": {
-                            "type": "plain_text_input",
-                            "multiline": true
-                        }
-                    }
-                ]
-            }
-        ] */
+        /* "text":"Welcome to the Only Once portal. Please read this on the slack client.",
+		"blocks": [
+			{
+				"type": "header",
+				"text": {
+					"type": "plain_text",
+					"text": "Join Only Once!",
+					"emoji": true
+				}
+			},
+			{
+				"type": "section",
+				"text": {
+					"type": "mrkdwn",
+					"text": `Welcome to the Only Once portal, <@${user}>. From here you can access the Only Once channel.`
+				}
+			},
+			{
+				"type": "divider"
+			},
+			{
+				"type": "section",
+				"text": {
+					"type": "mrkdwn",
+					"text": "In the Ony Once channel you can only send a message once, if you send the same message as anyone before you will get *BANNED*."
+				}
+			},
+			{
+				"type": "section",
+				"text": {
+					"type": "mrkdwn",
+					"text": "*RULES*\n\n- If you send the same message as anyone before you'll get *BANNED*.\n- The max text length is 300characters. If you use more you'll get *BANNED*.\n- All messages get .toLowerCase()ed so different capitalizaction doesnt work! \n- If you spam random characters to abuse the system you'll get *BANNED*.\n- All your messages sent in #only-once will be stored in a database unencrypted and linked with your user id."
+				}
+			},
+			{
+				"type": "divider"
+			},
+			{
+				"type": "actions",
+				"elements": [
+					{
+						"type": "button",
+						"text": {
+							"type": "plain_text",
+							"text": "I want to join!",
+							"emoji": true
+						},
+						"action_id": "joinonlyonce"
+					}
+				]
+			},
+			{
+				"type": "context",
+				"elements": [
+					{
+						"type": "image",
+						"image_url": "https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg",
+						"alt_text": "cute cat"
+					},
+					{
+						"type": "mrkdwn",
+						"text": "This was made by Victorio and is <https://github.com/v1ctorio/slack-only-once|completley open source>."
+					}
+				]
+			}
+		] */
         "text": "You wish to send a message, eh?",
         "blocks": [
             {
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "plain_text",
-                            "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
-                            "emoji": true
-                        }
-                    },
-                    {
-                        "type": "divider"
-                    },
-                    {
-                        "type": "input",
-                        "label": {
-                            "type": "plain_text",
-                            "text": "Whom would you like to send it to?",
-                            "emoji": true
-                        },
-                        "element": {
-                            "type": "plain_text_input",
-                            "multiline": false
-                        }
-                    },
-                    {
-                        "type": "input",
-                        "label": {
-                            "type": "plain_text",
-                            "text": "What is your message?",
-                            "emoji": true
-                        },
-                        "element": {
-                            "type": "plain_text_input",
-                            "multiline": true
-                        }
-                    }
-                ]
+                "type": "section",
+                "text": {
+                    "type": "plain_text",
+                    "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
+                    "emoji": true
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "input",
+                "label": {
+                    "type": "plain_text",
+                    "text": "Whom would you like to send it to?",
+                    "emoji": true
+                },
+                "element": {
+                    "type": "plain_text_input",
+                    "multiline": false
+                }
+            },
+            {
+                "type": "input",
+                "label": {
+                    "type": "plain_text",
+                    "text": "What is your message?",
+                    "emoji": true
+                },
+                "element": {
+                    "type": "plain_text_input",
+                    "multiline": true
+                }
             }
         ]
     }
