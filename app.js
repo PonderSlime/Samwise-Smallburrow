@@ -113,7 +113,6 @@ const commands = async () => {
             user: user_id,
             text: "hi! why did you run a command?"
         });
-        return sendMessageMessage;
     });
 }
 const newMemberJoin = async () => {
