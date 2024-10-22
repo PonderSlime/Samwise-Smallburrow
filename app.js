@@ -176,7 +176,7 @@ app.command("/wl", async ({ ack, body, client, command }) => {
         await ack()
         await client.chat.delete({
             channel: body.channel_id,
-            message: thread_ts,
+            ts: thread_ts,
         })
     
     })
