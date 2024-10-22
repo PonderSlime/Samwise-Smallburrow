@@ -104,7 +104,7 @@ app.command("/wl", async ({ ack, body, client, context, payload }) => {
         console.error(error);
     }
 });
-app.view('SAMWISE_MESSAGE_PROMPT', optionalMiddleWareFunction, async ({ payload }) => {
+app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload }) => {
     const submittedValues = payload.view.state.values
     console.log(submittedValues)
     // do stuff with submittedValues
