@@ -45,14 +45,6 @@ const commands = async () => {
     
         channel_id = command.channel_id
         user_id = command.user_id
-    
-        await app.client.chat.postEphemeral({
-            token: process.env.SLACK_BOT_TOKEN,
-            channel: channel_id,
-            user: user_id,
-            text: "hi! why did you run a command?"
-        });
-    
         const sendMessageMessage = {
             "text": "Hi!",
             "blocks": [
@@ -113,12 +105,22 @@ const commands = async () => {
                 }
             ]
         }
+    
+        await app.client.chat.postEphemeral({
+            token: process.env.SLACK_BOT_TOKEN,
+            channel: channel_id,
+            user: user_id,
+            text: "hi! why did you run a command?"
+        });
+    
+        await app.client.chat.postMessage({
+            token: process.env.SLACK_BOT_TOKEN,
+            user: user_id,
+            channel: command.channel,
+            blocks: sendMessageMessage.blocks,
+            text: sendMessageMessage.text
+        })
     });
-    await client.chat.postMessage({
-        channel: command.channel,
-        blocks: sendMessageMessage.blocks,
-        text: sendMessageMessage.text
-    })
 }
 const newMemberJoin = async () => {
     // listen for new members joining the channel
