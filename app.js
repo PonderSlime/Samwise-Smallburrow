@@ -22,192 +22,117 @@ const app = new App({
 console.log(
     '\n\n----------------------------------\n'
 )
-const sendMessageMessage = {
-    "type": "modal",
-    "title": {
-        "type": "plain_text",
-        "text": "My App",
-        "emoji": true
-    },
-    "submit": {
-        "type": "plain_text",
-        "text": "Submit",
-        "emoji": true
-    },
-    "close": {
-        "type": "plain_text",
-        "text": "Cancel",
-        "emoji": true
-    },
-    "blocks": [
-        {
-            "type": "section",
-            "text": {
-                "type": "plain_text",
-                "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
-                "emoji": true
-            }
+
+function openModal() {
+    return {
+        "type": "modal",
+        "title": {
+            "type": "plain_text",
+            "text": "My App",
+            "emoji": true
         },
-        {
-            "type": "divider"
+        "submit": {
+            "type": "plain_text",
+            "text": "Submit",
+            "emoji": true
         },
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": "Whom would you like to send it to?"
-            },
-            "accessory": {
-                "type": "users_select",
-                "placeholder": {
-                    "type": "plain_text",
-                    "text": "Select a user",
-                    "emoji": true
-                },
-                "action_id": "users_select-action"
-            }
+        "close": {
+            "type": "plain_text",
+            "text": "Cancel",
+            "emoji": true
         },
-        {
-            "type": "input",
-            "label": {
-                "type": "plain_text",
-                "text": "What is your message?",
-                "emoji": true
-            },
-            "element": {
-                "type": "plain_text_input",
-                "multiline": true
-            }
-        },
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": " "
-            }
-        },
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": " "
-            },
-            "accessory": {
-                "type": "button",
+        "blocks": [
+            {
+                "type": "section",
                 "text": {
                     "type": "plain_text",
-                    "text": "Send message",
+                    "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
                     "emoji": true
-                },
-                "value": "submit_message_form",
-                "action_id": "submit-message-action"
-            }
-        }
-    ]
-}
-const openModal = async () => {
-    async ({ inputs, client }) => {
-        const response = await client.views.open({
-            interactivity_pointer: inputs.interactivity.interactivity_pointer,
-            view: {
-                "type": "modal",
-                "title": {
-                    "type": "plain_text",
-                    "text": "My App",
-                    "emoji": true
-                },
-                "submit": {
-                    "type": "plain_text",
-                    "text": "Submit",
-                    "emoji": true
-                },
-                "close": {
-                    "type": "plain_text",
-                    "text": "Cancel",
-                    "emoji": true
-                },
-                "blocks": [
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "plain_text",
-                            "text": ":wave: Greetings guest!\nI hear that you want me to deliver a message for you!",
-                            "emoji": true
-                        }
-                    },
-                    {
-                        "type": "divider"
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": "Whom would you like to send it to?"
-                        },
-                        "accessory": {
-                            "type": "users_select",
-                            "placeholder": {
-                                "type": "plain_text",
-                                "text": "Select a user",
-                                "emoji": true
-                            },
-                            "action_id": "users_select-action"
-                        }
-                    },
-                    {
-                        "type": "input",
-                        "label": {
-                            "type": "plain_text",
-                            "text": "What is your message?",
-                            "emoji": true
-                        },
-                        "element": {
-                            "type": "plain_text_input",
-                            "multiline": true
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": " "
-                        }
-                    },
-                    {
-                        "type": "section",
-                        "text": {
-                            "type": "mrkdwn",
-                            "text": " "
-                        },
-                        "accessory": {
-                            "type": "button",
-                            "text": {
-                                "type": "plain_text",
-                                "text": "Send message",
-                                "emoji": true
-                            },
-                            "value": "submit_message_form",
-                            "action_id": "submit-message-action"
-                        }
-                    }
-                ]
-
+                }
             },
-        });
-        if (response.error) {
-            const error =
-                `Failed to open a modal in the demo workflow. Contact the app maintainers with the following information - (error: ${response.error})`;
-            return { error };
-        }
-            return {
-            // To continue with this interaction, return false for the completion
-            completed: false,
-            };
-        },
-    app.command("/wl", async ({ ack, body, client, command }) => {
-        openModal()
-    });
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Whom would you like to send it to?"
+                },
+                "accessory": {
+                    "type": "users_select",
+                    "placeholder": {
+                        "type": "plain_text",
+                        "text": "Select a user",
+                        "emoji": true
+                    },
+                    "action_id": "users_select-action"
+                }
+            },
+            {
+                "type": "input",
+                "label": {
+                    "type": "plain_text",
+                    "text": "What is your message?",
+                    "emoji": true
+                },
+                "element": {
+                    "type": "plain_text_input",
+                    "multiline": true
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": " "
+                }
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": " "
+                },
+                "accessory": {
+                    "type": "button",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Send message",
+                        "emoji": true
+                    },
+                    "value": "submit_message_form",
+                    "action_id": "submit-message-action"
+                }
+            }
+        ]
+    }
+    
 }
+app.command("/wl", async ({ ack, body, client }) => {
+    await ack();
+
+    try {
+        const result = await client.views.open({
+        trigger_id: body.trigger_id,
+        view: openModal(),
+        });
+
+        console.log(result);
+    } catch (error) {
+        console.error(error);
+    }
+});
+app.view('modal_view_id', async ({ ack, body, view }) => {
+    await ack();
+
+    // Process the submitted data from the view.values object
+    const values = view.state.values;
+    const inputValue = values.input_block.input_action.value;
+
+    // Do something with the inputValue
+    console.log('Input value:', inputValue);
+});
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
     const inputValue = view.state.values.input_block.input_action.value;
