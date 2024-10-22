@@ -18,6 +18,7 @@
   "homepage": "https://github.com/PonderSlime/Samwise-Smallburrow#readme",
   "dependencies": {
     "@slack/bolt": "^4.0.0",
+    "@slack/web-api": "^7.6.0",
     "dotenv": "^16.4.5"
   }
 }

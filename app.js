@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const { App, contextBuiltinKeys } = require('@slack/bolt');
+const { WebClient } = require('@slack/web-api');
 
 console.log(
     '----------------------------------\nSamwise Smallburrow Server\n----------------------------------\n'
@@ -18,6 +19,7 @@ const app = new App({
   // you still need to listen on some port!
     port: process.env.PORT || 3000
 });
+const webClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 console.log(
     '\n\n----------------------------------\n'
