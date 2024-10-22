@@ -28,9 +28,11 @@ console.log(
 function openModal() {
     return {
         "type": "modal",
+        "notify_on_close": true,
+        "callback_id": "samwise-message-prompt",
         "title": {
             "type": "plain_text",
-            "text": "My App",
+            "text": "Samwise Message Service",
             "emoji": true
         },
         "submit": {
@@ -83,30 +85,6 @@ function openModal() {
                     "multiline": true
                 }
             },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": " "
-                }
-            },
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": " "
-                },
-                "accessory": {
-                    "type": "button",
-                    "text": {
-                        "type": "plain_text",
-                        "text": "Send message",
-                        "emoji": true
-                    },
-                    "value": "submit_message_form",
-                    "action_id": "submit-message-action"
-                }
-            }
         ]
     }
     
@@ -125,7 +103,7 @@ app.command("/wl", async ({ ack, body, client }) => {
         console.error(error);
     }
 });
-app.view('modal_view_id', async ({ ack, body, view }) => {
+app.view('samwise-message-prompt', async ({ ack, body, view }) => {
     await ack();
 
     // Process the submitted data from the view.values object
