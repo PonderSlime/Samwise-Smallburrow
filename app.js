@@ -86,7 +86,7 @@ app.command("/wl", async ({ ack, body, client, command }) => {
         "text":"Welcome to the Only Once portal. Please read this on the slack client.",
 		"blocks": [
 			{
-				"type": "header",
+				"type": "modal",
 				"text": {
 					"type": "plain_text",
 					"text": "Join Only Once!",
@@ -150,7 +150,7 @@ app.command("/wl", async ({ ack, body, client, command }) => {
 			}
 		]
     }
-    await client.chat.postMessage({
+    await client.chat.postEphemeral({
         channel: command.channel_id,
 		blocks: sendMessageMessage.blocks,
 		text: sendMessageMessage.text
