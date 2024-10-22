@@ -105,8 +105,7 @@ const sendMessageMessage = {
         }
     ]
 }
-export default openModal( 
-    def,
+export default openModal(
 
     async ({ inputs, client }) => {
         const response = await client.views.open({
