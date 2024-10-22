@@ -150,7 +150,7 @@ app.command("/wl", async ({ ack, body, client, command }) => {
 			}
 		]
     }
-    await client.chat.postEphemeral({
+    await client.chat.postMessage({
         channel: command.channel_id,
 		blocks: sendMessageMessage.blocks,
 		text: sendMessageMessage.text
