@@ -86,7 +86,7 @@ app.command("/wl", async ({ ack, body, client, command }) => {
         "text":"Welcome to the Only Once portal. Please read this on the slack client.",
 		"blocks": [
 			{
-				"type": "modal",
+				"type": "header",
 				"text": {
 					"type": "plain_text",
 					"text": "Join Only Once!",
