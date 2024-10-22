@@ -106,7 +106,7 @@ const sendMessageMessage = {
     ]
 }
 function registerModalSubmissionHandler() {
-    this.slackApp.view(
+    this.app.view(
         sendMessageMessage,
         /* async ({ ack, body, view, client, respond }) => {
 
