@@ -22,68 +22,74 @@ const app = new App({
 console.log(
     '\n\n----------------------------------\n'
 )
-const sendMessageMessage = {
-    type: "modal",
-    submit: {
-        type: "plain_text",
-        text: "Submit",
-        emoji: true
-    },
-    close: {
-        type: "plain_text",
-        text: "Cancel",
-        emoji: true
-    },
-    title: {
-        type: "plain_text",
-        text: "Samwise Message Service",
-        emoji: true
-    },
-    blocks: [
-        {
-            type: "section",
-            text: {
-                type: "plain_text",
-                text: `:wave: Greetings Traveler!\nI hear that you want me to deliver a message for you!`,
-                emoji: true
-            }
-        },
-        {
-            type: "divider"
-        },
-        {
-            type: "input",
-            label: {
-                type: "plain_text",
-                text: "Whom would you like to send it to?",
-                emoji: true
-            },
-            element: {
-                type: "plain_text_input",
-                multiline: false
-            }
-        },
-        {
-            type: "input",
-            label: {
-                type: "plain_text",
-                text: "What is your message?",
-                emoji: true
-            },
-            element: {
-                type: "plain_text_input",
-                multiline: true
-            }
-        }
-    ]
-}
 
-app.command("/wl", async ({ ack, body, client }) => {
-    await ack();
-    await client.views.open({
-        trigger_id: body.trigger_id,
-        view: sendMessageMessage,
-    });
+app.command("/wl", async ({ ack, body, client, command }) => {
+    const sendMessageMessage = {
+        "text": "You wish to send a message, eh?",
+        "blocks": [
+            {
+                "type": "modal",
+                "submit": {
+                    "type": "plain_text",
+                    "text": "Submit",
+                    "emoji": true
+                },
+                "close": {
+                    "type": "plain_text",
+                    "text": "Cancel",
+                    "emoji": true
+                },
+                "title": {
+                    "type": "plain_text",
+                    "text": "Samwise Message Service",
+                    "emoji": true
+                },
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "plain_text",
+                            "text": `:wave: Greetings Traveler!\nI hear that you want me to deliver a message for you!`,
+                            "emoji": true
+                        }
+                    },
+                    {
+                        "type": "divider"
+                    },
+                    {
+                        "type": "input",
+                        "label": {
+                            "type": "plain_text",
+                            "text": "Whom would you like to send it to?",
+                            "emoji": true
+                        },
+                        "element": {
+                            "type": "plain_text_input",
+                            "multiline": false
+                        }
+                    },
+                    {
+                        "type": "input",
+                        "label": {
+                            "type": "plain_text",
+                            "text": "What is your message?",
+                            "emoji": true
+                        },
+                        "element": {
+                            "type": "plain_text_input",
+                            "multiline": true
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    await client.chat.postMessage({
+        channel: command.channel_id,
+		blocks: sendMessageMessage.blocks,
+		text: sendMessageMessage.text
+    })
+    await slackLog(`New member joined the portal <@${user}>`);
 });
 /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
     await ack();
