@@ -123,7 +123,3 @@ const commands = async () => {
         return sendMessageMessage;
     });
 }
-helloCheck()
-newMemberJoin()
-newAppMention()
-commands()
