@@ -30,6 +30,66 @@ const app = new App({
 console.log(
     '\n\n----------------------------------\n'
 )
+const sendMessageMessage = {
+    "text": "Hi!",
+    "blocks": [
+        {
+            "type": "modal",
+            "submit": {
+                "type": "plain_text",
+                "text": "Submit",
+                "emoji": true
+            },
+            "close": {
+                "type": "plain_text",
+                "text": "Cancel",
+                "emoji": true
+            },
+            "title": {
+                "type": "plain_text",
+                "text": "Samwise Message Service",
+                "emoji": true
+            },
+            "blocks": [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "plain_text",
+                        "text": `:wave: Greetings <@${user_id}>!\nI hear that you want me to deliver a message for you!`,
+                        "emoji": true
+                    }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "input",
+                    "label": {
+                        "type": "plain_text",
+                        "text": "Whom would you like to send it to?",
+                        "emoji": true
+                    },
+                    "element": {
+                        "type": "plain_text_input",
+                        "multiline": false
+                    }
+                },
+                {
+                    "type": "input",
+                    "label": {
+                        "type": "plain_text",
+                        "text": "What is your message?",
+                        "emoji": true
+                    },
+                    "element": {
+                        "type": "plain_text_input",
+                        "multiline": true
+                    }
+                }
+            ]
+        }
+    ]
+}
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -38,81 +98,32 @@ function sleep(ms) {
 const commands = async () => {
     app.command("/wl", async ({
         command,
-        ack
+        ack,
+        body,
+        client
     }) => {
         console.log(command)
         await ack()
     
         channel_id = command.channel_id
         user_id = command.user_id
-        const sendMessageMessage = {
-            "text": "Hi!",
-            "blocks": [
-                {
-                    "type": "modal",
-                    "submit": {
-                        "type": "plain_text",
-                        "text": "Submit",
-                        "emoji": true
-                    },
-                    "close": {
-                        "type": "plain_text",
-                        "text": "Cancel",
-                        "emoji": true
-                    },
-                    "title": {
-                        "type": "plain_text",
-                        "text": "Samwise Message Service",
-                        "emoji": true
-                    },
-                    "blocks": [
-                        {
-                            "type": "section",
-                            "text": {
-                                "type": "plain_text",
-                                "text": `:wave: Greetings <@${user_id}>!\nI hear that you want me to deliver a message for you!`,
-                                "emoji": true
-                            }
-                        },
-                        {
-                            "type": "divider"
-                        },
-                        {
-                            "type": "input",
-                            "label": {
-                                "type": "plain_text",
-                                "text": "Whom would you like to send it to?",
-                                "emoji": true
-                            },
-                            "element": {
-                                "type": "plain_text_input",
-                                "multiline": false
-                            }
-                        },
-                        {
-                            "type": "input",
-                            "label": {
-                                "type": "plain_text",
-                                "text": "What is your message?",
-                                "emoji": true
-                            },
-                            "element": {
-                                "type": "plain_text_input",
-                                "multiline": true
-                            }
-                        }
-                    ]
-                }
-            ]
-        }
         
-    
         await app.client.chat.postEphemeral({
             token: process.env.SLACK_BOT_TOKEN,
             channel: channel_id,
             user: user_id,
             text: "hi! why did you run a command?"
         });
+        await ack();
+        await client.views.open({
+            trigger_id: body.trigger_id,
+            view: sendMessageMessage,
+        });
+    });
+    app.view("modal_view_callback_id", async ({ ack, body, view }) => {
+        await ack();
+        const inputValue = view.state.values.input_block.input_action.value;
+        // Do something with the input value
     });
 }
 const newMemberJoin = async () => {
