@@ -171,11 +171,11 @@ app.command("/wl", async ({ ack, body, client, command }) => {
                 limit: 1,
             })
             .then((res) => res.messages?.[0].ts)
-    app.action('submit-message-action', async ({ ack, body, client }) => {
+    app.action('submit-message-action', async ({ ack, body, client, action }) => {
 
         await ack()
         await client.chat.delete({
-            channel: body.channel_id,
+            channel: action.channel_id,
             ts: thread_ts,
         })
     
