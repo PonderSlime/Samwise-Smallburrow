@@ -185,4 +185,3 @@ const hello = async () => {
 hello()
 newMemberJoin()
 appMention()
-commands()
