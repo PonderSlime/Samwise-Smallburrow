@@ -15,6 +15,7 @@ const app = new App({
     signingSecret: process.env.SLACK_SIGNING_SECRET,
     socketMode: true,
     appToken: process.env.SLACK_APP_TOKEN,
+    messagePasscode: process.env.MESSAGE_PASSCODE,
   // Socket Mode doesn't listen on a port, but in case you want your app to respond to OAuth,
   // you still need to listen on some port!
     port: process.env.PORT || 3000
@@ -58,23 +59,6 @@ function openModal() {
             {
                 "type": "divider"
             },
-            /* {
-                "type": "section",
-                "block_id": "user_input",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "Whom would you like to send it to?"
-                },
-                "accessory": {
-                    "type": "users_select",
-                    "placeholder": {
-                        "type": "plain_text",
-                        "text": "Select a user",
-                        "emoji": true
-                    },
-                    "action_id": "user_input_action"
-                }
-            }, */
             {
                 "type": "input",
                 "block_id": "user_input",
@@ -107,6 +91,19 @@ function openModal() {
                     "action_id": "message_prompt_action"
                 }
             },
+            {
+                "type": "input",
+                "block_id": "input_passcode",
+                "element": {
+                    "type": "plain_text_input",
+                    "action_id": "input_passcode_action"
+                },
+                "label": {
+                    "type": "plain_text",
+                    "text": "Input the Passcode!",
+                    "emoji": true
+                }
+            }
         ]
     }
     
@@ -128,16 +125,24 @@ const messageSender = async () => {
     });
     app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload, ack, body, view, say }) => {
         await ack();
-
         const values = view.state.values;
         const userInputValues = values.user_input.user_input_action.selected_users;
         const messageInputValue = values.message_prompt.message_prompt_action.value;
-        
-        console.log('Input value:', userInputValues);
-        for (const item of userInputValues) {
-            processItem(item, say, messageInputValue, userInputValues)
+        const inputtedPasscode = values.input_passcode.input_passcode_action.value;
+        const whoClicked = payload.user;
+        console.log(payload.user);
+        console.log(`Inputted passcode:`, inputtedPasscode);
+        console.log(`Correct passcode:`, process.env.MESSAGE_PASSCODE)
+        if (inputtedPasscode == process.env.MESSAGE_PASSCODE) {
+            console.log('Input value:', userInputValues);
+            for (const item of userInputValues) {
+            processItem(item, say, messageInputValue, userInputValues, whoClicked)
+            }
         }
-        
+        else {
+            console.log(`Incorrect passcode by`, whoClicked)
+            processIncorrectMessage(say, whoClicked, payload)
+        }
         // do stuff with submittedValues
     });
     /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
@@ -147,12 +152,20 @@ const messageSender = async () => {
     }); */
 
 
-    const processItem = async (item, say, message) => {
-        console.log(`Processing: ${item} with ${message}`);
+    const processItem = async (item, say, message, userSent) => {
+        console.log(`Processing: ${item} with ${message}, sent by ${userSent}`);
         // Add your logic here
         await app.client.chat.postMessage({
             channel: item,
-            text:`${message}`
+            text:`_<@${userSent}> whispers to you_, "${message}"`
+        });
+    };
+    const processIncorrectMessage = async (say, userSent, payload) => {
+        // Add your logic here
+        console.log(payload.user)
+        await app.client.chat.postMessage({
+            channel: payload.user,
+            text:`_<@${userSent}> Sorry! It appears that you don't have any stamps at the moment. Please contact <@${process.env.CREATOR}> about ordering stamps!`
         });
     };
 }
