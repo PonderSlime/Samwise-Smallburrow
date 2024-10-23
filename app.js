@@ -58,8 +58,9 @@ function openModal() {
             {
                 "type": "divider"
             },
-            {
+            /* {
                 "type": "section",
+                "block_id": "user_input",
                 "text": {
                     "type": "mrkdwn",
                     "text": "Whom would you like to send it to?"
@@ -71,11 +72,30 @@ function openModal() {
                         "text": "Select a user",
                         "emoji": true
                     },
-                    "action_id": "users_select-action"
+                    "action_id": "user_input_action"
+                }
+            }, */
+            {
+                "type": "input",
+                "block_id": "user_input",
+                "element": {
+                    "type": "multi_users_select",
+                    "placeholder": {
+                        "type": "plain_text",
+                        "text": "Select users",
+                        "emoji": true
+                    },
+                    "action_id": "user_input_action"
+                },
+                "label": {
+                    "type": "plain_text",
+                    "text": "Whom would you like to send it to?",
+                    "emoji": true
                 }
             },
             {
                 "type": "input",
+                "block_id": "message_prompt",
                 "label": {
                     "type": "plain_text",
                     "text": "What is your message?",
@@ -83,42 +103,59 @@ function openModal() {
                 },
                 "element": {
                     "type": "plain_text_input",
-                    "multiline": true
+                    "multiline": true,
+                    "action_id": "message_prompt_action"
                 }
             },
         ]
     }
     
 }
-app.command("/wl", async ({ ack, body, client, context, payload }) => {
-    await ack();
+const messageSender = async () => {
+    app.command("/wl", async ({ ack, body, client, context, payload }) => {
+        await ack();
 
-    try {
-        const result = await client.views.open({
-        trigger_id: body.trigger_id,
-        view: openModal(),
+        try {
+            const result = await client.views.open({
+            trigger_id: body.trigger_id,
+            view: openModal(),
+            });
+
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+    });
+    app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload, ack, body, view, say }) => {
+        await ack();
+
+        const values = view.state.values;
+        const userInputValues = values.user_input.user_input_action.selected_users;
+        const messageInputValue = values.message_prompt.message_prompt_action.value;
+        
+        console.log('Input value:', userInputValues);
+        for (const item of userInputValues) {
+            processItem(item, say, messageInputValue, userInputValues)
+        }
+        
+        // do stuff with submittedValues
+    });
+    /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
+        await ack();
+        const inputValue = view.state.values.input_block.input_action.value;
+        // Do something with the input value
+    }); */
+
+
+    const processItem = async (item, say, message) => {
+        console.log(`Processing: ${item} with ${message}`);
+        // Add your logic here
+        await app.client.chat.postMessage({
+            channel: item,
+            text:`${message}`
         });
-
-        console.log(result);
-    } catch (error) {
-        console.error(error);
-    }
-});
-app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload, ack, body, view }) => {
-    await ack();
-
-    const values = view.state.values;
-    const inputValue = values.input_block.input_action.value;
-    
-    console.log('Input value:', inputValue);
-    // do stuff with submittedValues
-});
-/* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
-    await ack();
-    const inputValue = view.state.values.input_block.input_action.value;
-    // Do something with the input value
-}); */
-
+    };
+}
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -132,6 +169,7 @@ function sleep(ms) {
 
     console.log('⚡️ Bolt app is running!');
 })();
+
 
 const newMemberJoin = async () => {
     // listen for new members joining the channel
@@ -207,3 +245,4 @@ const hello = async () => {
 hello()
 newMemberJoin()
 appMention()
+messageSender()
