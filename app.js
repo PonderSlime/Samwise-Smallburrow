@@ -141,7 +141,7 @@ const messageSender = async () => {
         }
         else {
             console.log(`Incorrect passcode by`, whoClicked)
-            processIncorrectMessage(say, whoClicked, payload)
+            processIncorrectMessage(say, whoClicked)
         }
         // do stuff with submittedValues
     });
@@ -160,11 +160,11 @@ const messageSender = async () => {
             text:`_<@${userSent}> whispers to you_, "${message}"`
         });
     };
-    const processIncorrectMessage = async (say, userSent, payload) => {
+    const processIncorrectMessage = async (say, userSent) => {
         // Add your logic here
-        console.log(payload.user)
+        console.log(whoClicked)
         await app.client.chat.postMessage({
-            channel: payload.user,
+            channel: whoClicked,
             text:`_<@${userSent}> Sorry! It appears that you don't have any stamps at the moment. Please contact <@${process.env.CREATOR}> about ordering stamps!`
         });
     };
