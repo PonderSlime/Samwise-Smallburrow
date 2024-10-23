@@ -109,15 +109,17 @@ function openModal() {
     
 }
 const messageSender = async () => {
-    app.command("/wl", async ({ ack, body, client, context, payload }) => {
+    let whoClicked = null
+    app.command("/wl", async ({ ack, body, client, context, payload, command }) => {
         await ack();
-
+        whoClicked = body.user_id
         try {
             const result = await client.views.open({
-            trigger_id: body.trigger_id,
-            view: openModal(),
+                trigger_id: body.trigger_id,
+                view: openModal(),
             });
-
+            
+            console.log(`Who Clicked:`, whoClicked);
             console.log(result);
         } catch (error) {
             console.error(error);
@@ -129,17 +131,21 @@ const messageSender = async () => {
         const userInputValues = values.user_input.user_input_action.selected_users;
         const messageInputValue = values.message_prompt.message_prompt_action.value;
         const inputtedPasscode = values.input_passcode.input_passcode_action.value;
-        const whoClicked = payload.user;
+        // ISSUE IS HERE //
+        // Change from payload.user to something that gets the client IP or something.
+        //const whoClicked = payload.user;
+        // END OF ISSUE //
+        console.log(`Who Clicked:`, whoClicked);
         console.log(`Inputted passcode:`, inputtedPasscode);
         console.log(`Correct passcode:`, process.env.MESSAGE_PASSCODE)
         console.log('Input value:', userInputValues);
         if (inputtedPasscode == process.env.MESSAGE_PASSCODE) {
             for (const item of userInputValues) {
-                processItem(item, say, messageInputValue, userInputValues, whoClicked,)
+                processItem(item, say, messageInputValue, whoClicked,)
             }
         }
         else if (inputtedPasscode !== process.env.MESSAGE_PASSCODE) {
-            console.log(`Someone made an attemt to login`)
+            processIncorrectItem(whoClicked)
         }
     })
     const processItem = async (item, say, message, userSent,) => {
@@ -149,6 +155,14 @@ const messageSender = async () => {
             channel: item,
             text:`_<@${userSent}> whispers to you_, "${message}"`
         });
+    }
+    const processIncorrectItem = async (userSpammed) => {
+        console.log(`Incorrect passcode by`, userSpammed)
+        await app.client.chat.postMessage({
+            channel: userSpammed,
+            text:`Sorry! It appears that you don't have any stamps at the moment. Please contact <@${process.env.CREATOR}> about ordering stamps!`
+        });
+        console.log(`Sent warning to`, userSpammed)
     }
 }
 function sleep(ms) {
@@ -164,6 +178,8 @@ function sleep(ms) {
 
     console.log('⚡️ Bolt app is running!');
 })();
+
+
 const newMemberJoin = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload, message, say, channel, event }) => {
