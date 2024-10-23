@@ -131,10 +131,6 @@ const messageSender = async () => {
         const userInputValues = values.user_input.user_input_action.selected_users;
         const messageInputValue = values.message_prompt.message_prompt_action.value;
         const inputtedPasscode = values.input_passcode.input_passcode_action.value;
-        // ISSUE IS HERE //
-        // Change from payload.user to something that gets the client IP or something.
-        //const whoClicked = payload.user;
-        // END OF ISSUE //
         console.log(`Who Clicked:`, whoClicked);
         console.log(`Inputted passcode:`, inputtedPasscode);
         console.log(`Correct passcode:`, process.env.MESSAGE_PASSCODE)
