@@ -130,44 +130,26 @@ const messageSender = async () => {
         const messageInputValue = values.message_prompt.message_prompt_action.value;
         const inputtedPasscode = values.input_passcode.input_passcode_action.value;
         const whoClicked = payload.user;
-        console.log(payload.user);
         console.log(`Inputted passcode:`, inputtedPasscode);
         console.log(`Correct passcode:`, process.env.MESSAGE_PASSCODE)
+        console.log('Input value:', userInputValues);
         if (inputtedPasscode == process.env.MESSAGE_PASSCODE) {
-            console.log('Input value:', userInputValues);
             for (const item of userInputValues) {
-            processItem(item, say, messageInputValue, userInputValues, whoClicked)
+                processItem(item, say, messageInputValue, userInputValues, whoClicked,)
             }
         }
-        else {
-            console.log(`Incorrect passcode by`, whoClicked)
-            processIncorrectMessage(say, whoClicked)
+        else if (inputtedPasscode !== process.env.MESSAGE_PASSCODE) {
+            console.log(`Someone made an attemt to login`)
         }
-        // do stuff with submittedValues
-    });
-    /* app.view("modal_view_callback_id", async ({ ack, body, view }) => {
-        await ack();
-        const inputValue = view.state.values.input_block.input_action.value;
-        // Do something with the input value
-    }); */
-
-
-    const processItem = async (item, say, message, userSent) => {
+    })
+    const processItem = async (item, say, message, userSent,) => {
         console.log(`Processing: ${item} with ${message}, sent by ${userSent}`);
         // Add your logic here
         await app.client.chat.postMessage({
             channel: item,
             text:`_<@${userSent}> whispers to you_, "${message}"`
         });
-    };
-    const processIncorrectMessage = async (say, userSent) => {
-        // Add your logic here
-        console.log(whoClicked)
-        await app.client.chat.postMessage({
-            channel: whoClicked,
-            text:`_<@${userSent}> Sorry! It appears that you don't have any stamps at the moment. Please contact <@${process.env.CREATOR}> about ordering stamps!`
-        });
-    };
+    }
 }
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -182,8 +164,6 @@ function sleep(ms) {
 
     console.log('⚡️ Bolt app is running!');
 })();
-
-
 const newMemberJoin = async () => {
     // listen for new members joining the channel
     app.event('member_joined_channel', async ({ payload, message, say, channel, event }) => {
