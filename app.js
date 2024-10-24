@@ -25,6 +25,7 @@ const webClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
+    baseURL: "https://jamsapi.hackclub.dev/openai"
 });
 
 console.log(
@@ -35,7 +36,7 @@ async function getOpenAIResponse(userMessage) {
     try {
         const completion = await openai.chat.completions.create({
             messages: [
-                { role: "system", content: "You are a helpful assistant."},
+                { role: "system", content: "You are a friendly hobbit."},
                 { role: "user", content: userMessage }
             ],
             model: "gpt-4o",
