@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const { App, contextBuiltinKeys } = require('@slack/bolt');
 const { WebClient } = require('@slack/web-api');
+const { OpenAI } = require('openai');
 
 console.log(
     '----------------------------------\nSamwise Smallburrow Server\n----------------------------------\n'
@@ -22,9 +23,30 @@ const app = new App({
 });
 const webClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
 console.log(
     '\n\n----------------------------------\n'
 )
+
+async function getOpenAIResponse(userMessage) {
+    try {
+        const completion = await openai.chat.completions.create({
+            messages: [
+                { role: "system", content: "You are a helpful assistant."},
+                { role: "user", content: userMessage }
+            ],
+            model: "gpt-4o",
+        });
+
+        return completion.choices[0].message.content;
+    } catch (error) {
+        console.error("Error communicating with OpenAI:", error);
+        throw new Error("Failed to get response from OpenAI.");
+    }
+}
 
 function openModal() {
     return {
@@ -173,6 +195,27 @@ function sleep(ms) {
     await app.start();
 
     console.log('⚡️ Bolt app is running!');
+
+    app.message(async ({ message, say }) => {
+        const userMessage = message.text.trim();
+
+        switch (userMessage) {
+            case "AI?":
+                console.log(`Matched "AI?" case`);
+                const quote = "would you like to play a game?";
+                await say(`Greetings, <@${message.user}>, ${quote}`);
+                break;
+            default:
+                try {
+                    const openaiResponse = await getOpenAIResponse(userMessage);
+                    await say(`<@${message.user}>: ${openaiResponse}`);
+                } catch (error) {
+                    await say(`Sorry <@${message.user}>, I encoutered an error trying to process your request.`);
+                }
+                break;
+        }
+
+    })
 })();
 
 
