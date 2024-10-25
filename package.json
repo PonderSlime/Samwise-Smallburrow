@@ -17,9 +17,13 @@
   },
   "homepage": "https://github.com/PonderSlime/Samwise-Smallburrow#readme",
   "dependencies": {
+    "@llama-node/core": "^0.1.6",
+    "@llama-node/llama-cpp": "^0.1.6",
     "@slack/bolt": "^4.0.0",
     "@slack/web-api": "^7.6.0",
     "dotenv": "^16.4.5",
+    "llama-node": "^0.1.6",
+    "ollama": "^0.5.9",
     "openai": "^4.68.4"
   }
 }

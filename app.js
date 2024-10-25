@@ -1,8 +1,7 @@
 require('dotenv').config();
-
 const { App, contextBuiltinKeys } = require('@slack/bolt');
 const { WebClient } = require('@slack/web-api');
-const { OpenAI } = require('openai');
+const { Ollama } = require('ollama')
 
 console.log(
     '----------------------------------\nSamwise Smallburrow Server\n----------------------------------\n'
@@ -22,30 +21,25 @@ const app = new App({
     port: process.env.PORT || 3000
 });
 const webClient = new WebClient(process.env.SLACK_BOT_TOKEN);
-
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    baseURL: "https://jamsapi.hackclub.dev/openai"
-});
-
+const ollama = new Ollama();
 console.log(
     '\n\n----------------------------------\n'
 )
 
-async function getOpenAIResponse(userMessage) {
+async function getOLlamaResponse(userMessage) {
     try {
-        const completion = await openai.chat.completions.create({
+        const completion = await ollama.chat({
             messages: [
-                { role: "system", content: "You are a friendly hobbit."},
+                { role: "system", content: modelfile},
                 { role: "user", content: userMessage }
             ],
-            model: "gpt-4o",
+            model: 'llama3.2',
         });
 
-        return completion.choices[0].message.content;
+        return completion.message.content;
     } catch (error) {
-        console.error("Error communicating with OpenAI:", error);
-        throw new Error("Failed to get response from OpenAI.");
+        console.error("Error communicating with Ollama:", error);
+        throw new Error("Failed to get response from Ollama.");
     }
 }
 
@@ -193,29 +187,28 @@ function sleep(ms) {
 (async () => {
     console.log('⚡️ Bolt app is starting up!');
   // Start your app
+    await ollama.create({ model: 'example', path: './bot/Modelfile' })
     await app.start();
 
     console.log('⚡️ Bolt app is running!');
-
     app.message(async ({ message, say }) => {
+        
         const userMessage = message.text.trim();
 
         switch (userMessage) {
             case "AI?":
                 console.log(`Matched "AI?" case`);
-                const quote = "would you like to play a game?";
-                await say(`Greetings, <@${message.user}>, ${quote}`);
+                await say(`Greetings, <@${message.user}>!`);
                 break;
             default:
                 try {
-                    const openaiResponse = await getOpenAIResponse(userMessage);
-                    await say(`<@${message.user}>: ${openaiResponse}`);
+                    const OLlamaResponse = await getOLlamaResponse(userMessage);
+                    await say(`<@${message.user}>: ${OLlamaResponse}`);
                 } catch (error) {
                     await say(`Sorry <@${message.user}>, I encoutered an error trying to process your request.`);
                 }
                 break;
         }
-
     })
 })();
 
