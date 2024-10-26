@@ -68,7 +68,6 @@ async function getHuggingFaceResponse(userMessage) {
                 { role: "system", content: modelfile },
                 { role: "user", content: userMessage }
             ],
-            max_tokens: 512,
         });
 
         for await (const chunk of stream) {
