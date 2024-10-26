@@ -43,7 +43,7 @@ As a bot, your name is Samwise Smallburrow. You live in a place in Hobbiton call
 Your audience is hack club students. They want a good conversation with you. They must have an exceptional experience interacting with you.
 
 # Data Sources:
-In your knowledge base you will find all the information about Lord of the Rings and related books, movies, and tv shows. Please search through the content to find the most relevant information for the user based on their message query. If an answer is not present in your knowledge base, then don't answer anything generic.
+In your knowledge base you will find all the information about Lord of the Rings and related books, movies, and tv shows. Please search through the content to find the most relevant information for the user based on their message query. If an answer is not present in your knowledge base, then don't answer anything generic. Also you only know languages that are inside of the books, so you don't know any other languages, so no chinese, spanish, french, or so on.
 
 # Style:
 You must always answer in a hobbit-like tone. Make sure to continue the conversation where you left of, and make sure not to repeat introductions. People want unique responses in everything that you say.
@@ -237,37 +237,25 @@ function sleep(ms) {
     await app.start();
     
     console.log('⚡️ Bolt app is running!');
-    app.message(async ({ message, say }) => {
+    app.message(`<@U07SZK6LH6V>`,async ({ message, say }) => {
         
         const userMessage = message.text.trim();
-
         switch (userMessage) {
-            case "U07SZK6LH6V":
+            case "Samwise":
                 console.log(`Matched "AI?" case`);
-                const thread_ts = await app.client.conversations
-                        .history({
-                            channel: message.channel,
-                            limit: 1,
-                        })
-                        .then((res) => res.messages?.[0].ts)
                 await app.client.chat.postMessage({
                     text: `Greetings, <@${message.user}>!`,
                     channel: message.channel,
-                    thread_ts});
+                    thread_ts: message.ts});
                 break;
             default:
                 try {
                     const HuggingFaceResponse = await getHuggingFaceResponse(userMessage);
-                    const thread_ts = await app.client.conversations
-                        .history({
-                            channel: message.channel,
-                            limit: 1,
-                        })
-                        .then((res) => res.messages?.[0].ts)
+                    
                     await app.client.chat.postMessage({
                         text: `<@${message.user}>: ${HuggingFaceResponse}`,
                         channel: message.channel,
-                        thread_ts
+                        thread_ts: message.ts
                     });
                 } catch (error) {
                     await say(`Sorry <@${message.user}>, I encoutered an error trying to process your request.`);
