@@ -237,12 +237,12 @@ function sleep(ms) {
     await app.start();
     
     console.log('⚡️ Bolt app is running!');
-    app.message(async ({ message, say }) => {
+    app.event('app_mention', async ({ message, say }) => {
         
         const userMessage = message.text.trim();
 
         switch (userMessage) {
-            case "<@U07SZK6LH6V>":
+            case "":
                 console.log(`Matched "AI?" case`);
                 const thread_ts = await app.client.conversations
                         .history({
