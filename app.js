@@ -244,7 +244,16 @@ function sleep(ms) {
         switch (userMessage) {
             case "AI?":
                 console.log(`Matched "AI?" case`);
-                await say(`Greetings, <@${message.user}>!`);
+                const thread_ts = await app.client.conversations
+                        .history({
+                            channel: message.channel,
+                            limit: 1,
+                        })
+                        .then((res) => res.messages?.[0].ts)
+                await app.client.chat.postMessage({
+                    text: `Greetings, <@${message.user}>!`,
+                    channel: message.channel,
+                    thread_ts});
                 break;
             default:
                 try {
