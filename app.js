@@ -242,7 +242,7 @@ function sleep(ms) {
         const userMessage = message.text.trim();
 
         switch (userMessage) {
-            case "AI?":
+            case "<@U07SZK6LH6V>":
                 console.log(`Matched "AI?" case`);
                 const thread_ts = await app.client.conversations
                         .history({
