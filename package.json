@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/PonderSlime/Samwise-Smallburrow#readme",
   "dependencies": {
+    "@huggingface/agents": "^0.0.5",
+    "@huggingface/inference": "^2.8.1",
     "@llama-node/core": "^0.1.6",
     "@llama-node/llama-cpp": "^0.1.6",
     "@slack/bolt": "^4.0.0",

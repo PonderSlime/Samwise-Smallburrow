@@ -2,13 +2,14 @@ require('dotenv').config();
 const { App, contextBuiltinKeys } = require('@slack/bolt');
 const { WebClient } = require('@slack/web-api');
 const { Ollama } = require('ollama')
-
+const { HfInference } = require('@huggingface/inference')
 console.log(
     '----------------------------------\nSamwise Smallburrow Server\n----------------------------------\n'
 )
 console.log('🏗️  Starting Samwise Smallburrow...')
 console.log('📦 Loading Slack App...')
 console.log('🔑 Loading environment variables...')
+const hf_token = process.env.HUGGINGFACE_API_KEY;
 
 const app = new App({
     token: process.env.SLACK_BOT_TOKEN,
@@ -21,10 +22,13 @@ const app = new App({
     port: process.env.PORT || 3000
 });
 const webClient = new WebClient(process.env.SLACK_BOT_TOKEN);
-const ollama = new Ollama();
+//const ollama = new Ollama();
 console.log(
     '\n\n----------------------------------\n'
 )
+
+const inference = new HfInference(process.env.HUGGINGFACE_API_KEY);
+
 const modelfile = `
 FROM llama3.2
 
@@ -52,22 +56,38 @@ You must always answer in a hobbit-like tone. Make sure to continue the conversa
 - If you don't follow the rules, you will be penalized.
 """
 `
-async function getOLlamaResponse(userMessage) {
+let out = "";
+let nextMessage = "";
+let nextMessageContent = "";
+let newContent = "";
+async function getHuggingFaceResponse(userMessage) {
     try {
-        const completion = await ollama.chat({
+        const stream = await inference.chatCompletionStream({
+            model: "meta-llama/Llama-3.2-3B-Instruct",
             messages: [
-                { role: "system", content: modelfile},
+                { role: "system", content: modelfile },
                 { role: "user", content: userMessage }
             ],
-            model: 'llama3.2',
+            max_tokens: 512,
         });
 
-        return completion.message.content;
+        for await (const chunk of stream) {
+            if (chunk.choices && chunk.choices.length > 0) {
+                newContent = chunk.choices[0].delta.content;
+                out += newContent;
+                console.log(newContent);
+            }
+            nextMessageContent += newContent;
+        }
+        nextMessage = nextMessageContent;
+        nextMessageContent = "";
+        return nextMessage;
     } catch (error) {
         console.error("Error communicating with Ollama:", error);
         throw new Error("Failed to get response from Ollama.");
     }
 }
+
 
 function openModal() {
     return {
@@ -213,9 +233,9 @@ function sleep(ms) {
 (async () => {
     console.log('⚡️ Bolt app is starting up!');
   // Start your app
-    await ollama.create({ model: 'example', modelfile: modelfile })
+    //await ollama.create({ model: 'example', modelfile: modelfile })
     await app.start();
-
+    
     console.log('⚡️ Bolt app is running!');
     app.message(async ({ message, say }) => {
         
@@ -228,8 +248,18 @@ function sleep(ms) {
                 break;
             default:
                 try {
-                    const OLlamaResponse = await getOLlamaResponse(userMessage);
-                    await say(`<@${message.user}>: ${OLlamaResponse}`);
+                    const HuggingFaceResponse = await getHuggingFaceResponse(userMessage);
+                    const thread_ts = await app.client.conversations
+                        .history({
+                            channel: message.channel,
+                            limit: 1,
+                        })
+                        .then((res) => res.messages?.[0].ts)
+                    await app.client.chat.postMessage({
+                        text: `<@${message.user}>: ${HuggingFaceResponse}`,
+                        channel: message.channel,
+                        thread_ts
+                    });
                 } catch (error) {
                     await say(`Sorry <@${message.user}>, I encoutered an error trying to process your request.`);
                 }
