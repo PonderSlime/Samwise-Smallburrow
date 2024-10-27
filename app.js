@@ -30,8 +30,6 @@ console.log(
 const inference = new HfInference(process.env.HUGGINGFACE_API_KEY);
 
 const modelfile = `
-FROM llama3.2
-
 SYSTEM """
 # Objective:
 Your objective is to talk like a hobbit and provide engaging conversations with your users
