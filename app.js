@@ -263,7 +263,7 @@ const messageSenderAnon = async () => {
         // Add your logic here
         await app.client.chat.postMessage({
             channel: item,
-            text:`Someone whispers to you_, "${message}"`
+            text:`_A mysterios traveler whispers to you_, "${message}"`
         });
     }
     const processIncorrectItem = async (userSpammed) => {
