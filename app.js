@@ -169,6 +169,88 @@ function openModal() {
     }
     
 }
+function openModalAnon() {
+    return {
+        "type": "modal",
+        "notify_on_close": true,
+        "callback_id": "SAMWISE_MESSAGE_PROMPT_ANON",
+
+        "title": {
+            "type": "plain_text",
+            "text": "Samwise Message Service",
+            "emoji": true
+        },
+        "submit": {
+            "type": "plain_text",
+            "text": "Submit",
+            "emoji": true
+        },
+        "close": {
+            "type": "plain_text",
+            "text": "Cancel",
+            "emoji": true
+        },
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "plain_text",
+                    "text": ":wave: Greetings guest!\nI hear that you want me to deliver an anonymous message for you!",
+                    "emoji": true
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "input",
+                "block_id": "user_input",
+                "element": {
+                    "type": "multi_users_select",
+                    "placeholder": {
+                        "type": "plain_text",
+                        "text": "Select users",
+                        "emoji": true
+                    },
+                    "action_id": "user_input_action"
+                },
+                "label": {
+                    "type": "plain_text",
+                    "text": "Whom would you like to send it to?",
+                    "emoji": true
+                }
+            },
+            {
+                "type": "input",
+                "block_id": "message_prompt",
+                "label": {
+                    "type": "plain_text",
+                    "text": "What is your message?",
+                    "emoji": true
+                },
+                "element": {
+                    "type": "plain_text_input",
+                    "multiline": true,
+                    "action_id": "message_prompt_action"
+                }
+            },
+            {
+                "type": "input",
+                "block_id": "input_passcode",
+                "element": {
+                    "type": "plain_text_input",
+                    "action_id": "input_passcode_action"
+                },
+                "label": {
+                    "type": "plain_text",
+                    "text": "Input the Passcode!",
+                    "emoji": true
+                }
+            }
+        ]
+    }
+    
+}
 const messageSender = async () => {
     let whoClicked = null
     app.command("/send-msg", async ({ ack, body, client, context, payload, command }) => {
@@ -230,7 +312,7 @@ const messageSenderAnon = async () => {
         try {
             const result = await client.views.open({
                 trigger_id: body.trigger_id,
-                view: openModal(),
+                view: openModalAnon(),
             });
             
             console.log(`Who Clicked:`, whoClicked);
@@ -239,7 +321,7 @@ const messageSenderAnon = async () => {
             console.error(error);
         }
     });
-    app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload, ack, body, view, say }) => {
+    app.view('SAMWISE_MESSAGE_PROMPT_ANON', async ({ payload, ack, body, view, say }) => {
         await ack();
         const values = view.state.values;
         const userInputValues = values.user_input.user_input_action.selected_users;
