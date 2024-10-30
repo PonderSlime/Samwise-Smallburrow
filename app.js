@@ -171,7 +171,7 @@ function openModal() {
 }
 const messageSender = async () => {
     let whoClicked = null
-    app.command("/wl", async ({ ack, body, client, context, payload, command }) => {
+    app.command("/send-msg", async ({ ack, body, client, context, payload, command }) => {
         await ack();
         whoClicked = body.user_id
         try {
@@ -211,6 +211,59 @@ const messageSender = async () => {
         await app.client.chat.postMessage({
             channel: item,
             text:`_<@${userSent}> whispers to you_, "${message}"`
+        });
+    }
+    const processIncorrectItem = async (userSpammed) => {
+        console.log(`Incorrect passcode by`, userSpammed)
+        await app.client.chat.postMessage({
+            channel: userSpammed,
+            text:`Sorry! It appears that you don't have any stamps at the moment. Please contact <@${process.env.CREATOR}> about ordering stamps!`
+        });
+        console.log(`Sent warning to`, userSpammed)
+    }
+}
+const messageSenderAnon = async () => {
+    let whoClicked = null
+    app.command("/send-anon", async ({ ack, body, client, context, payload, command }) => {
+        await ack();
+        whoClicked = body.user_id
+        try {
+            const result = await client.views.open({
+                trigger_id: body.trigger_id,
+                view: openModal(),
+            });
+            
+            console.log(`Who Clicked:`, whoClicked);
+            console.log(result);
+        } catch (error) {
+            console.error(error);
+        }
+    });
+    app.view('SAMWISE_MESSAGE_PROMPT', async ({ payload, ack, body, view, say }) => {
+        await ack();
+        const values = view.state.values;
+        const userInputValues = values.user_input.user_input_action.selected_users;
+        const messageInputValue = values.message_prompt.message_prompt_action.value;
+        const inputtedPasscode = values.input_passcode.input_passcode_action.value;
+        console.log(`Who Clicked:`, whoClicked);
+        console.log(`Inputted passcode:`, inputtedPasscode);
+        console.log(`Correct passcode:`, process.env.MESSAGE_PASSCODE)
+        console.log('Input value:', userInputValues);
+        if (inputtedPasscode == process.env.MESSAGE_PASSCODE) {
+            for (const item of userInputValues) {
+                processItem(item, say, messageInputValue, whoClicked,)
+            }
+        }
+        else if (inputtedPasscode !== process.env.MESSAGE_PASSCODE) {
+            processIncorrectItem(whoClicked)
+        }
+    })
+    const processItem = async (item, say, message, userSent,) => {
+        console.log(`Processing: ${item} with ${message}, sent by ${userSent}`);
+        // Add your logic here
+        await app.client.chat.postMessage({
+            channel: item,
+            text:`Someone whispers to you_, "${message}"`
         });
     }
     const processIncorrectItem = async (userSpammed) => {
@@ -339,3 +392,4 @@ hello()
 newMemberJoin()
 appMention()
 messageSender()
+messageSenderAnon()
