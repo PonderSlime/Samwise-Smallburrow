@@ -309,7 +309,7 @@ const addUserToUsergroupStep = (user_to_add) => {
     {
         usergroup_id: "S084S90F4P9",
         user_ids: [`${user_to_add}`],
-    },
+    };
 }
 
 const messageSender = async () => {
